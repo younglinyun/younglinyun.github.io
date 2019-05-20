@@ -96,16 +96,19 @@
 
 
 
-  <meta name="description" content="业精于勤，荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Title">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$ 脉冲作用的一瞬间（$t=0\rightarrow 0^+$），有加速度 $\ddot{x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离散傅里叶变换求解常微分方程">
+<meta property="og:url" content="http://yoursite.com/2019/05/20/Solve-ODE-by-using-DFT/index.html">
 <meta property="og:site_name" content="Title">
-<meta property="og:description" content="业精于勤，荒于嬉">
+<meta property="og:description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$ 脉冲作用的一瞬间（$t=0\rightarrow 0^+$），有加速度 $\ddot{x">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/SDOFresponse.png">
+<meta property="og:updated_time" content="2019-05-20T11:53:59.333Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Title">
-<meta name="twitter:description" content="业精于勤，荒于嬉">
+<meta name="twitter:title" content="离散傅里叶变换求解常微分方程">
+<meta name="twitter:description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$ 脉冲作用的一瞬间（$t=0\rightarrow 0^+$），有加速度 $\ddot{x">
+<meta name="twitter:image" content="http://yoursite.com/images/SDOFresponse.png">
 
 
 
@@ -113,7 +116,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/20/Solve-ODE-by-using-DFT/">
 
 
 
@@ -123,7 +126,7 @@
   };
 </script>
 
-  <title>Title</title>
+  <title>离散傅里叶变换求解常微分方程 | Title</title>
   
 
 
@@ -171,8 +174,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,7 +216,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -327,9 +329,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -361,10 +363,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/20/Solve-ODE-by-using-DFT/" class="post-title-link" itemprop="url">离散傅里叶变换求解常微分方程</a>
+          <h1 class="post-title" itemprop="name headline">离散傅里叶变换求解常微分方程
+
               
             
           </h1>
@@ -428,9 +428,7 @@
       
 
       
-        
-          
-            <h2 id="单位脉冲响应函数"><a href="#单位脉冲响应函数" class="headerlink" title="单位脉冲响应函数"></a>单位脉冲响应函数</h2><p>单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为</p>
+        <h2 id="单位脉冲响应函数"><a href="#单位脉冲响应函数" class="headerlink" title="单位脉冲响应函数"></a>单位脉冲响应函数</h2><p>单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为</p>
 <p>$$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$</p>
 <p>或者也可写为</p>
 <p>$$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$</p>
@@ -488,8 +486,6 @@ $$
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line">close all</span><br><span class="line"></span><br><span class="line"><span class="comment">% 系统参数</span></span><br><span class="line">m = <span class="number">1</span>;</span><br><span class="line">k = <span class="number">1</span>;</span><br><span class="line">zeta = <span class="number">0.05</span>;</span><br><span class="line">c = <span class="number">2</span>*zeta*<span class="built_in">sqrt</span>(k*m);</span><br><span class="line">omegan = <span class="built_in">sqrt</span>(k/m);</span><br><span class="line">omegad = omegan*<span class="built_in">sqrt</span>(<span class="number">1</span>-zeta^<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 离散采样</span></span><br><span class="line">Fs = <span class="number">10</span>;</span><br><span class="line">n  = <span class="number">200</span>*Fs;</span><br><span class="line">dt = <span class="number">1</span>/Fs;</span><br><span class="line">t  = <span class="number">0</span>:dt:(n<span class="number">-1</span>)*dt;</span><br><span class="line">freq = <span class="number">0</span>:Fs/n:(n<span class="number">-1</span>)/n*Fs;</span><br><span class="line">omega = <span class="number">2</span>*<span class="built_in">pi</span>*freq;</span><br><span class="line"></span><br><span class="line"><span class="comment">% 傅里叶变换求解响应</span></span><br><span class="line">f = <span class="built_in">exp</span>(-(t<span class="number">-4</span>).^<span class="number">2</span>);</span><br><span class="line">F = fft(f)*dt;</span><br><span class="line">H = <span class="number">1</span> ./ (k-m*omega.^<span class="number">2</span> + <span class="number">1</span><span class="built_in">i</span>*c*omega);</span><br><span class="line">X = H .* F;</span><br><span class="line">x = ifft(X) * <span class="number">2</span>*Fs;</span><br><span class="line"></span><br><span class="line"><span class="comment">% ODE45 求解微分方程（认为是精确解）</span></span><br><span class="line">[tt,y] = ode45(@(t,y) myfun(t,y,m,k,c),[<span class="number">0</span>,t(<span class="keyword">end</span>)],[<span class="number">0</span>,<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 结果对比</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(t,f,<span class="string">'b-'</span>)</span><br><span class="line">xlim([<span class="number">0</span>,<span class="number">10</span>])</span><br><span class="line">ylabel(<span class="string">'$f(t)$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br><span class="line"></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(tt,y(:,<span class="number">1</span>),<span class="string">'b-'</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot</span>(t,x,<span class="string">'b.'</span>)</span><br><span class="line">xlim([<span class="number">0</span>,<span class="number">50</span>])</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'直接求解'</span>,<span class="string">'傅里叶变换'</span>)</span><br><span class="line">xlabel(<span class="string">'$t$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br><span class="line">ylabel(<span class="string">'$x(t)$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dy</span> = <span class="title">myfun</span><span class="params">(t,y,m,k,c)</span></span></span><br><span class="line">    dy = <span class="built_in">zeros</span>(<span class="number">2</span>,<span class="number">1</span>);</span><br><span class="line">    dy(<span class="number">1</span>) = y(<span class="number">2</span>);</span><br><span class="line">    dy(<span class="number">2</span>) = (<span class="built_in">exp</span>(-(t<span class="number">-4</span>)^<span class="number">2</span>) - k*y(<span class="number">1</span>) - c*y(<span class="number">2</span>))/m;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-          
-        
       
     </div>
 
@@ -512,202 +508,28 @@ $$
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/16/PGI_MKL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Yang">
-      <meta itemprop="description" content="业精于勤，荒于嬉">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Title">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/16/PGI_MKL/" class="post-title-link" itemprop="url">PGI Fortran + Intel MKL 安装使用</a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/2019/05/16/PGI_MKL/" rel="next" title="PGI Fortran + Intel MKL 安装使用">
+                <i class="fa fa-chevron-left"></i> PGI Fortran + Intel MKL 安装使用
+              </a>
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-16 14:21:26" itemprop="dateCreated datePublished" datetime="2019-05-16T14:21:26+08:00">2019-05-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-18 22:52:37" itemprop="dateModified" datetime="2019-05-18T22:52:37+08:00">2019-05-18</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/笔记/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="安装-PGI-Community-Edition"><a href="#安装-PGI-Community-Edition" class="headerlink" title="安装 PGI Community Edition"></a>安装 PGI Community Edition</h2><p>前往官网的下载页面，下载<a href="https://www.pgroup.com/products/community.htm" target="_blank" rel="noopener">免费社区版</a>，选择Windows系统即可。首页底部的<code>Documentation</code>-&gt;<code>Installation Guide</code>里面有对 Linux 、macOS 和 Windows 操作系统下安装过程详细的说明。其中 Windows 部分在<a href="https://www.pgroup.com/resources/docs/19.4/x86/pgi-install-guide/index.htm#install-win-pgi" target="_blank" rel="noopener">第6节</a>，这里给出简单的总结：</p>
-<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><p>正式安装之前，应确保PGI软件已下载，而且其他必需的非PGI软件已经安装完毕，具体而言就是如下3个：</p>
-<ol>
-<li><p><a href="https://support.microsoft.com/en-us/help/2999226/update-for-universal-c-runtime-in-windows" target="_blank" rel="noopener">Microsoft Update for Universal C Runtime</a>，通常而言，Windows的自动更新已经确保它已经安装上。</p>
-</li>
-<li><p>Microsoft Windows SDK</p>
-</li>
-<li><p>Microsoft Visual Studio 2017</p>
-</li>
-</ol>
-<p>最后两项安装 Visual Studio 2017 社区版就行，<code>工作负载</code>选择<code>使用 c++ 的桌面开发</code>，可以看到右侧安装详细信息里默认有 <code>Windows 10 SDK</code> 选项，其他选择默认即可。</p>
-<p><img src="/images/vs.png" alt="title"></p>
-<p>最后以管理员权限运行 PGI 安装包即可，最后把 <code>bin</code> 文件夹需要添加至环境变量。</p>
-<h3 id="测试一下"><a href="#测试一下" class="headerlink" title="测试一下"></a>测试一下</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">PROGRAM</span></span> main</span><br><span class="line">  <span class="keyword">IMPLICIT</span> <span class="keyword">NONE</span></span><br><span class="line">  <span class="keyword">INTEGER</span> i,j</span><br><span class="line">  <span class="keyword">INTEGER</span>, <span class="keyword">PARAMETER</span> :: n = <span class="number">3</span></span><br><span class="line">  <span class="keyword">REAL</span>(<span class="number">8</span>) :: A(n,n), x(n,<span class="number">1</span>), y(n,<span class="number">1</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">DO</span> j = <span class="number">1</span>,n</span><br><span class="line">    <span class="keyword">DO</span> i = <span class="number">1</span>,n</span><br><span class="line">      A(i,j) = (j-<span class="number">1</span>)*n + i</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">    x(j,<span class="number">1</span>) = j</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">  </span><br><span class="line">  y = <span class="built_in">MATMUL</span>(A,x)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">WRITE</span>(*,*) y</span><br><span class="line"></span><br><span class="line"><span class="keyword">END</span> <span class="function"><span class="keyword">PROGRAM</span></span> main</span><br></pre></td></tr></table></figure>
-
-<p>顺利的话，可以看到编译成功，并输出正确结果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pgfortran main.f90</span><br><span class="line">main.exe</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -717,14 +539,15 @@ $$
   </article>
 
 
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -744,8 +567,17 @@ $$
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -827,6 +659,23 @@ $$
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单位脉冲响应函数"><span class="nav-number">1.</span> <span class="nav-text">单位脉冲响应函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单位脉冲响应函数与频响函数的关系"><span class="nav-number">2.</span> <span class="nav-text">单位脉冲响应函数与频响函数的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值计算中的实际考量"><span class="nav-number">2.2.</span> <span class="nav-text">数值计算中的实际考量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用算例"><span class="nav-number">3.</span> <span class="nav-text">应用算例</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -950,6 +799,10 @@ $$
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
 
   
 
@@ -966,6 +819,8 @@ $$
   
 
 
+  
+
 
   
 
@@ -980,14 +835,6 @@ $$
   
 
   
-  
-    
-      
-        
-      
-    
-      
-    
   
 
   

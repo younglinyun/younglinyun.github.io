@@ -105,7 +105,7 @@
 <meta property="og:description" content="安装 PGI Community Edition前往官网的下载页面，下载免费社区版，选择Windows系统即可。首页底部的Documentation-&amp;gt;Installation Guide里面有对 Linux 、macOS 和 Windows 操作系统下安装过程详细的说明。其中 Windows 部分在第6节，这里给出简单的总结： 安装步骤正式安装之前，应确保PGI软件已下载，而且其他必需的非">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/vs.png">
-<meta property="og:updated_time" content="2019-05-18T11:25:39.994Z">
+<meta property="og:updated_time" content="2019-05-18T14:52:37.330Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PGI Fortran + Intel MKL 安装使用">
 <meta name="twitter:description" content="安装 PGI Community Edition前往官网的下载页面，下载免费社区版，选择Windows系统即可。首页底部的Documentation-&amp;gt;Installation Guide里面有对 Linux 、macOS 和 Windows 操作系统下安装过程详细的说明。其中 Windows 部分在第6节，这里给出简单的总结： 安装步骤正式安装之前，应确保PGI软件已下载，而且其他必需的非">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-18 19:25:39" itemprop="dateModified" datetime="2019-05-18T19:25:39+08:00">2019-05-18</time>
+                <time title="修改时间：2019-05-18 22:52:37" itemprop="dateModified" datetime="2019-05-18T22:52:37+08:00">2019-05-18</time>
               
             
           </span>
@@ -472,7 +472,7 @@
 <p>最后两项安装 Visual Studio 2017 社区版就行，<code>工作负载</code>选择<code>使用 c++ 的桌面开发</code>，可以看到右侧安装详细信息里默认有 <code>Windows 10 SDK</code> 选项，其他选择默认即可。</p>
 <p><img src="/images/vs.png" alt="title"></p>
 <p>最后以管理员权限运行 PGI 安装包即可，最后把 <code>bin</code> 文件夹需要添加至环境变量。</p>
-<h3 id="测试一下"><a href="#测试一下" class="headerlink" title="测试一下"></a>测试一下</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">PROGRAM</span></span> main</span><br><span class="line">  <span class="keyword">IMPLICIT</span> <span class="keyword">NONE</span></span><br><span class="line">  <span class="keyword">INTEGER</span> i,j</span><br><span class="line">  <span class="keyword">INTEGER</span>, <span class="keyword">PARAMETER</span> :: n = <span class="number">3</span></span><br><span class="line">  <span class="keyword">REAL</span>(<span class="number">8</span>) :: A(n,n), x(n,<span class="number">1</span>), y(n,<span class="number">1</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">DO</span> j = <span class="number">1</span>,n</span><br><span class="line">    <span class="keyword">DO</span> i = <span class="number">1</span>,n</span><br><span class="line">      A(i,j) = (j-<span class="number">1</span>)*n + i</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">    x(j,<span class="number">1</span>) = j</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">  </span><br><span class="line">  y = <span class="built_in">MATMUL</span>(A,x)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">WRITE</span>(*,*) y</span><br><span class="line"></span><br><span class="line"><span class="keyword">END</span> <span class="function"><span class="keyword">PROGRAM</span></span> Main</span><br></pre></td></tr></table></figure>
+<h3 id="测试一下"><a href="#测试一下" class="headerlink" title="测试一下"></a>测试一下</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">PROGRAM</span></span> main</span><br><span class="line">  <span class="keyword">IMPLICIT</span> <span class="keyword">NONE</span></span><br><span class="line">  <span class="keyword">INTEGER</span> i,j</span><br><span class="line">  <span class="keyword">INTEGER</span>, <span class="keyword">PARAMETER</span> :: n = <span class="number">3</span></span><br><span class="line">  <span class="keyword">REAL</span>(<span class="number">8</span>) :: A(n,n), x(n,<span class="number">1</span>), y(n,<span class="number">1</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">DO</span> j = <span class="number">1</span>,n</span><br><span class="line">    <span class="keyword">DO</span> i = <span class="number">1</span>,n</span><br><span class="line">      A(i,j) = (j-<span class="number">1</span>)*n + i</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">    x(j,<span class="number">1</span>) = j</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">DO</span></span><br><span class="line">  </span><br><span class="line">  y = <span class="built_in">MATMUL</span>(A,x)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">WRITE</span>(*,*) y</span><br><span class="line"></span><br><span class="line"><span class="keyword">END</span> <span class="function"><span class="keyword">PROGRAM</span></span> main</span><br></pre></td></tr></table></figure>
 
 <p>顺利的话，可以看到编译成功，并输出正确结果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pgfortran main.f90</span><br><span class="line">main.exe</span><br></pre></td></tr></table></figure>
@@ -511,6 +511,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/20/Solve-ODE-by-using-DFT/" rel="prev" title="离散傅里叶变换求解常微分方程">
+                离散傅里叶变换求解常微分方程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -576,7 +592,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

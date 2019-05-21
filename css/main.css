@@ -1773,7 +1773,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d055ff;
+  background: #013cff;
 }
 .feed-link,
 .chat {
@@ -2427,11 +2427,8 @@ hr {
 .site-meta .site-title {
   font-size: 22px;
   font-weight: bolder;
-}
-@media (max-width: 767px) {
-  .site-meta .site-title {
-    line-height: 34px;
-  }
+/*
+    +mobile() { line-height: 34px; } */
 }
 .logo-line-before,
 .logo-line-after {

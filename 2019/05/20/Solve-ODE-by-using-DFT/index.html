@@ -106,7 +106,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/SDOFresponse.png">
 <meta property="og:image" content="http://yoursite.com/images/ClapVib_fft.png">
-<meta property="og:updated_time" content="2019-05-23T11:09:04.381Z">
+<meta property="og:updated_time" content="2019-05-23T11:24:47.245Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="离散傅里叶变换求解常微分方程">
 <meta name="twitter:description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$">
@@ -402,7 +402,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-23 19:09:04" itemprop="dateModified" datetime="2019-05-23T19:09:04+08:00">2019-05-23</time>
+                <time title="修改时间：2019-05-23 19:24:47" itemprop="dateModified" datetime="2019-05-23T19:24:47+08:00">2019-05-23</time>
               
             
           </span>
@@ -519,7 +519,7 @@ $$
 <h2 id="应用算例"><a href="#应用算例" class="headerlink" title="应用算例"></a>应用算例</h2><p>考察外激励力为高斯脉冲</p>
 <p>$$ f(t) = \exp(-(t-4)^2) $$</p>
 <p>时，此单自由度的位移响应。我们首先求出激励的傅里叶变换 $F(\omega)$，然后得到响应的傅里叶变换 $X(\omega)$，最后由傅里叶逆变换得到 $x(t)$。为了验证结果的正确性，我们同时还用 <code>ode45</code> 直接求解了这个方程，两种方法得到的结果列于下图中，可以看到吻合度非常高。</p>
-<p>值得注意的是：频率分辨率的高低直接影响求解结果的准确度，特别是初始阶段。观察发现阻尼比 $\zeta$ 越低，就需要更高的频率分辨率，退化到无阻尼情况时似乎无法准确给出结果。</p>
+<p>值得注意的是：频率分辨率的高低直接影响求解结果的准确度，特别是初始阶段。提高频率分辨通过延长采样数据，即在原始的时域数据之后补零的方式来实现。</p>
 <center>
 <img src="/images/SDOFresponse.png" width="75%" height="75%">
 图 高斯脉冲激励及其响应

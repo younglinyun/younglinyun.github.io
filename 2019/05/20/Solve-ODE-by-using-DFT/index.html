@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$">
+<meta name="keywords" content="FFT,结构动力学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离散傅里叶变换求解常微分方程">
+<meta property="og:url" content="http://yoursite.com/2019/05/20/Solve-ODE-by-using-DFT/index.html">
+<meta property="og:site_name" content="Linyun Yang">
+<meta property="og:description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/SDOFresponse.png">
+<meta property="og:image" content="http://yoursite.com/images/ClapVib_fft.png">
+<meta property="og:updated_time" content="2020-02-20T22:54:18.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="离散傅里叶变换求解常微分方程">
+<meta name="twitter:description" content="单位脉冲响应函数单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为 $$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$ 或者也可写为 $$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$">
+<meta name="twitter:image" content="http://yoursite.com/images/SDOFresponse.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/05/20/Solve-ODE-by-using-DFT/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>离散傅里叶变换求解常微分方程 | Linyun Yang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="site-title">Linyun Yang</span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/20/Solve-ODE-by-using-DFT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linyun Yang">
+      <meta itemprop="description" content="业精于勤，荒于嬉">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linyun Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">离散傅里叶变换求解常微分方程
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-20 16:07:40" itemprop="dateCreated datePublished" datetime="2019-05-20T16:07:40+02:00">2019-05-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-20 23:54:18" itemprop="dateModified" datetime="2020-02-20T23:54:18+01:00">2020-02-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/笔记/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/笔记/数值计算/" itemprop="url" rel="index"><span itemprop="name">数值计算</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="单位脉冲响应函数"><a href="#单位脉冲响应函数" class="headerlink" title="单位脉冲响应函数"></a>单位脉冲响应函数</h2><p>单自由度有阻尼系统在初始时刻静止，单位脉冲的作用下其运动方程为</p>
+<p>$$ m\ddot{x} + c\dot{x} + kx = \delta(t) $$</p>
+<p>或者也可写为</p>
+<p>$$ \ddot{x} + 2n\dot{x} + \omega_n^2 x = \frac{1}{m}\delta(t) $$</p>
+<a id="more"></a>
+
+<p>脉冲作用的一瞬间（$t=0\rightarrow 0^+$），有加速度 $\ddot{x}=\frac{1}{m}\delta(t)$，积分可得脉冲作用瞬间之后的初速度 $\dot{x}_0$ 和初位移 $x_0$：</p>
+<p>$$<br>\dot{x}_0 = \int_0^{0^+}\ddot{x}(t)\mathrm{d}t=\frac{1}{m}, \quad<br>x_0       = \int_0^{0^+}\dot{x}(t)\mathrm{d}t = 0<br>$$</p>
+<p>脉冲作用完毕之后系统在初始条件下作自由振动，可解得其响应为</p>
+<div>
+$$
+x(t) = \left\{
+\begin{array}{ll}
+0 & t<0 \\ \displaystyle\frac{\exp(-\zeta\omega_n t)}{\sqrt{mk(1-\zeta^2)}}\sin\omega_dt & t> 0 \\
+\end{array}    
+\right.
+$$
+</0></div>
+
+<p>阻尼比 $\displaystyle\zeta=\frac{c}{2\sqrt{km}}$，有阻尼固有频率 $\omega_d=\omega_n\sqrt{1-\zeta^2}$。</p>
+<p>这个响应即称为脉冲响应函数，也用 $h(t)$ 来表示。</p>
+<h2 id="单位脉冲响应函数与频响函数的关系"><a href="#单位脉冲响应函数与频响函数的关系" class="headerlink" title="单位脉冲响应函数与频响函数的关系"></a>单位脉冲响应函数与频响函数的关系</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>我们都知道 $h(t)$ 和 $H(\omega)$ 是傅里叶变换对的关系，这里还是给出验证过程</p>
+<div>
+$$
+\begin{split}
+ H(\omega) &= \mathcal{F}(h(t)) = \int_{\infty}^{+\infty} h(t)e^{-i\omega t}\mathrm{d}t = \int_0^{+\infty} h(t)e^{-i\omega t}\mathrm{d}t \\
+           &= \frac{1}{\sqrt{mk(1-\zeta^2)}} \frac{\omega_d}{\omega_d^2-(\omega-i\zeta\omega_n)^2} = \frac{1}{k-m\omega_n^2+ic\omega} \quad (\omega\in\mathbb{R})
+\end{split}
+$$
+</div>
+
+<p>反过来，在计算逆变换的时候，$t&lt;0$ 和 $t\ge 0$ 两个区间得到不同的积分结果，也正是 $h(t)$ 的分段表达式。利用 <code>Mathematica</code> 可以很快得到该结果</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Integrate</span>[</span><br><span class="line">omegad / (omegad^<span class="number">2</span>-(omega-<span class="keyword">I</span>*zeta*omegan)^<span class="number">2</span>) * <span class="keyword">Exp</span>[<span class="keyword">I</span>*omega*t], &#123;omega,-Infinity,Infinity&#125;,</span><br><span class="line"><span class="keyword">Assumptions</span> -&gt; &#123;omegan&gt;0,omegad&gt;0,zeta&gt;0,t&gt;0&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="数值计算中的实际考量"><a href="#数值计算中的实际考量" class="headerlink" title="数值计算中的实际考量"></a>数值计算中的实际考量</h3><p>傅里叶正变换</p>
+<p>$$ \mathcal{F}(f(t)) = \int_{-\infty}^{+\infty} f(t)e^{-i\omega t} \mathrm{d}t<br>   \approx \sum_j f(t_j) e^{-i\omega t_j} \Delta t = \mathrm{fft(f_{data})} \Delta t<br>$$</p>
+<p>傅里叶逆变换</p>
+<div>
+$$ 
+\begin{split}
+\mathcal{F}^{-1}(F(\omega)) &= \frac{1}{2\pi} \int_{-\infty}^{+\infty} F(\omega)e^{i\omega t} \mathrm{d}\omega 
+   \approx \frac{1}{2\pi} \sum_j F(\omega_j) e^{i\omega_j t} \cdot 2\pi\Delta f  \\
+   &= \sum_j F(\omega_j) e^{i\omega_j t} \frac{F_s}{n} = F_s \cdot \mathrm{ifft(F_{data})}
+\end{split}
+$$
+</div>
+
+<p>上式中 $F(\omega)$ 应该在实轴正负两端都取值，但通常只给出正半轴的数据，因此这种情况下要额外再乘 2。</p>
+<h2 id="应用算例"><a href="#应用算例" class="headerlink" title="应用算例"></a>应用算例</h2><p>考察外激励力为高斯脉冲</p>
+<p>$$ f(t) = \exp(-(t-4)^2) $$</p>
+<p>时，此单自由度的位移响应。我们首先求出激励的傅里叶变换 $F(\omega)$，然后得到响应的傅里叶变换 $X(\omega)$，最后由傅里叶逆变换得到 $x(t)$。为了验证结果的正确性，我们同时还用 <code>ode45</code> 直接求解了这个方程，两种方法得到的结果列于下图中，可以看到吻合度非常高。</p>
+<p>值得注意的是：频率分辨率的高低直接影响求解结果的准确度，特别是初始阶段。提高频率分辨通过延长采样数据，即在原始的时域数据之后补零的方式来实现。</p>
+<center>
+<img src="/images/SDOFresponse.png" width="75%" height="75%">
+图 高斯脉冲激励及其响应
+</center>
+
+<p>附上 <code>Matlab</code> 代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line">close all</span><br><span class="line"></span><br><span class="line"><span class="comment">% 系统参数</span></span><br><span class="line">m = <span class="number">1</span>;</span><br><span class="line">k = <span class="number">1</span>;</span><br><span class="line">zeta = <span class="number">0.05</span>;</span><br><span class="line">c = <span class="number">2</span>*zeta*<span class="built_in">sqrt</span>(k*m);</span><br><span class="line">omegan = <span class="built_in">sqrt</span>(k/m);</span><br><span class="line">omegad = omegan*<span class="built_in">sqrt</span>(<span class="number">1</span>-zeta^<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 离散采样</span></span><br><span class="line">Fs = <span class="number">10</span>;</span><br><span class="line">n  = <span class="number">200</span>*Fs;</span><br><span class="line">dt = <span class="number">1</span>/Fs;</span><br><span class="line">t  = <span class="number">0</span>:dt:(n<span class="number">-1</span>)*dt;</span><br><span class="line">freq = <span class="number">0</span>:Fs/n:(n<span class="number">-1</span>)/n*Fs;</span><br><span class="line">omega = <span class="number">2</span>*<span class="built_in">pi</span>*freq;</span><br><span class="line"></span><br><span class="line"><span class="comment">% 傅里叶变换求解响应</span></span><br><span class="line">f = <span class="built_in">exp</span>(-(t<span class="number">-4</span>).^<span class="number">2</span>);</span><br><span class="line">F = fft(f)*dt;</span><br><span class="line">H = <span class="number">1</span> ./ (k-m*omega.^<span class="number">2</span> + <span class="number">1</span><span class="built_in">i</span>*c*omega);</span><br><span class="line">X = H .* F;</span><br><span class="line">x = ifft(X) * <span class="number">2</span>*Fs;</span><br><span class="line"></span><br><span class="line"><span class="comment">% ODE45 求解微分方程（认为是精确解）</span></span><br><span class="line">[tt,y] = ode45(@(t,y) myfun(t,y,m,k,c),[<span class="number">0</span>,t(<span class="keyword">end</span>)],[<span class="number">0</span>,<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 结果对比</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(t,f,<span class="string">'b-'</span>)</span><br><span class="line">xlim([<span class="number">0</span>,<span class="number">10</span>])</span><br><span class="line">ylabel(<span class="string">'$f(t)$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br><span class="line"></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(tt,y(:,<span class="number">1</span>),<span class="string">'b-'</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot</span>(t,x,<span class="string">'b.'</span>)</span><br><span class="line">xlim([<span class="number">0</span>,<span class="number">50</span>])</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'直接求解'</span>,<span class="string">'傅里叶变换'</span>)</span><br><span class="line">xlabel(<span class="string">'$t$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br><span class="line">ylabel(<span class="string">'$x(t)$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dy</span> = <span class="title">myfun</span><span class="params">(t,y,m,k,c)</span></span></span><br><span class="line">    dy = <span class="built_in">zeros</span>(<span class="number">2</span>,<span class="number">1</span>);</span><br><span class="line">    dy(<span class="number">1</span>) = y(<span class="number">2</span>);</span><br><span class="line">    dy(<span class="number">2</span>) = (<span class="built_in">exp</span>(-(t<span class="number">-4</span>)^<span class="number">2</span>) - k*y(<span class="number">1</span>) - c*y(<span class="number">2</span>))/m;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><h3 id="初始条件"><a href="#初始条件" class="headerlink" title="初始条件"></a>初始条件</h3><p>上述杜哈梅积分过程得到的是系统<code>零初始响应</code>，如果初始条件不为零，则在 <code>ifft</code> 逆变换之后还需要额外加上<code>零输入响应</code>。</p>
+<blockquote>
+<p>邱吉宝. 计算结构动力学[M]. 中国科学技术大学出版社, 2009.</p>
+</blockquote>
+<h3 id="无阻尼系统"><a href="#无阻尼系统" class="headerlink" title="无阻尼系统"></a>无阻尼系统</h3><p>回到杜哈梅积分的表达式</p>
+<p>$$<br>x(t) = \int_0^t f(\tau)h(t-\tau)\mathrm{d}\tau<br>$$</p>
+<p>(1). 由于在计时开始前 ($t&lt;0$) 并没有外力作用，上式的积分下限可延伸至 $-\infty$；</p>
+<p>(2). 而脉冲响应函数 $h(t-\tau)$ 的宗量 $t-\tau&lt;0$ 时 $h$ 也为 0，所以积分上限又可以延伸至 $+\infty$.</p>
+<p>因此 </p>
+<p>$$x(t) = \int_{-\infty}^{+\infty} f(\tau)h(t-\tau)\mathrm{d}\tau = f(t) * h(t) $$</p>
+<p>只有在 $f(t)$ 和 $h(t)$ 的傅里叶变换都存在的情况下上式才可以进一步在变换至频域内相乘，而无阻尼系统 $h(t)$ 不满足绝对可积的条件，不能直接 $\displaystyle\mathcal{F}(h(t))=\frac{1}{k-m\omega^2}$。正确的做法应该是回到 $[0,t]$ 区间的积分式，同样对 $\displaystyle h(t)=\frac{1}{m\omega_n}\sin(\omega_n t)$ 进行离散采样，然后通过 <code>fft</code> 得到 $H(\omega)$。</p>
+<center>
+<img src="/images/ClapVib_fft.png" width="75%" height="75%">
+图 无阻尼系统在简谐激励下的拍振
+</center>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FFT/" rel="tag"># FFT</a>
+          
+            <a href="/tags/结构动力学/" rel="tag"># 结构动力学</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/27/MMA/" rel="prev" title="MMA 和 GCMMA 使用笔记">
+                MMA 和 GCMMA 使用笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Linyun Yang</p>
+              <div class="site-description motion-element" itemprop="description">业精于勤，荒于嬉</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单位脉冲响应函数"><span class="nav-number">1.</span> <span class="nav-text">单位脉冲响应函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单位脉冲响应函数与频响函数的关系"><span class="nav-number">2.</span> <span class="nav-text">单位脉冲响应函数与频响函数的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值计算中的实际考量"><span class="nav-number">2.2.</span> <span class="nav-text">数值计算中的实际考量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用算例"><span class="nav-number">3.</span> <span class="nav-text">应用算例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充说明"><span class="nav-number">4.</span> <span class="nav-text">补充说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始条件"><span class="nav-number">4.1.</span> <span class="nav-text">初始条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无阻尼系统"><span class="nav-number">4.2.</span> <span class="nav-text">无阻尼系统</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Linyun Yang</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').not('.gist .highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+</body>
+</html>

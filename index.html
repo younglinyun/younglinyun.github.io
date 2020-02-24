@@ -400,7 +400,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 14:34:59" itemprop="dateModified" datetime="2020-02-24T14:34:59+01:00">2020-02-24</time>
+                <time title="修改时间：2020-02-24 23:37:59" itemprop="dateModified" datetime="2020-02-24T23:37:59+01:00">2020-02-24</time>
               
             
           </span>
@@ -435,16 +435,20 @@
 
       
         
-          
-            <p>在单胞尺度上进行等效平均（因此需要在 long wavelength 的条件下方可成立），得出等效质量密度 $\rho_{\text{eff}}$ 和等效模量 $K_{\text{eff}},\mu_{\text{eff}}$ 对频率 $\omega$ 的变化。</p>
+          <p>在单胞尺度上进行等效平均（因此需要在 long wavelength 的条件下方可成立），得出等效质量密度 $\rho_{\text{eff}}$ 和等效模量 $K_{\text{eff}},\mu_{\text{eff}}$ 对频率 $\omega$ 的变化。</p>
 <h2 id="负等效密度"><a href="#负等效密度" class="headerlink" title="负等效密度"></a>负等效密度</h2><p>利用牛顿第二定律，由平衡方程<br>$$<br>\sum_{\partial V} \boldsymbol{F} = (\rho_{\text{eff}} V) \ddot{\boldsymbol{u}} = -\rho_{\text{eff}} V \omega^2 \boldsymbol{u}<br>$$</p>
 <p>即
 $$<br>\begin{equation}<br>\begin{Bmatrix}<br>\sum F_x\\<br>\sum F_y\\<br>\sum F_z<br>\end{Bmatrix}<br>= -\omega^2 V<br>\begin{bmatrix}<br>    \rho_{\text{eff}}^{11} &amp; \rho_{\text{eff}}^{12} &amp; \rho_{\text{eff}}^{13}\\<br>    \rho_{\text{eff}}^{21} &amp; \rho_{\text{eff}}^{22} &amp; \rho_{\text{eff}}^{23}\\<br>    \rho_{\text{eff}}^{31} &amp; \rho_{\text{eff}}^{32} &amp; \rho_{\text{eff}}^{33}<br>\end{bmatrix}<br>\begin{Bmatrix}<br>    u_x\\<br>    u_y\\<br>    u_z<br>\end{Bmatrix}<br>\end{equation}<br>$$</p>
 <p>指定单胞边界线（面）上的位移，通过有限元方法求解其支反力，然后由上式得到等效密度各分量。比如设 $\boldsymbol{u}=(1,0,0)\exp(i\omega t)$ 便可得 $[\rho_{\text{eff}}]$ 中第1列各元素，设 $\boldsymbol{u}=(0,1,0)\exp(i\omega t)$ 便可得 $[\rho_{\text{eff}}]$ 中第2列各元素。</p>
-<h2 id="负等效刚度-模量"><a href="#负等效刚度-模量" class="headerlink" title="负等效刚度/模量"></a>负等效刚度/模量</h2><p>以给定单胞边界线（面）上的位移 $\boldsymbol{u}$ 的方式，构造出预想的应变场，然后计算支反力，由能量方程<br>$$<br>\sum_{\partial V} \boldsymbol{F} \cdot \boldsymbol{u} = \frac{1}{2}C_{ijkl}^{\text{eff}} \varepsilon_{ij} \varepsilon_{kl} = \frac{1}{2}<br>\begin{bmatrix}<br>    \varepsilon_{11} \\<br>    \varepsilon_{22} \\<br>    \varepsilon_{33} \\<br>    2\varepsilon_{23} \\<br>    2\varepsilon_{13} \\<br>    2\varepsilon_{12} \\<br>\end{bmatrix}^{\top}<br>\begin{bmatrix}<br>    \lambda+2\mu &amp; \lambda &amp; \lambda &amp; 0 &amp; 0 &amp; 0\\<br>    \lambda &amp; \lambda+2\mu &amp; \lambda &amp; 0 &amp; 0 &amp; 0\\<br>    \lambda &amp; \lambda &amp; \lambda+2\mu &amp; 0 &amp; 0 &amp; 0\\<br>    0 &amp; 0 &amp; 0 &amp; \mu &amp; 0 &amp; 0\\<br>    0 &amp; 0 &amp; 0 &amp; 0 &amp; \mu &amp; 0\\<br>    0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \mu\\<br>\end{bmatrix}^{\text{eff}}<br>\begin{bmatrix}<br>    \varepsilon_{11} \\<br>    \varepsilon_{22} \\<br>    \varepsilon_{33} \\<br>    2\varepsilon_{23} \\<br>    2\varepsilon_{13} \\<br>    2\varepsilon_{12} \\<br>\end{bmatrix}<br>$$</p>
-<p>令 $\boldsymbol{u}=(x,y,z)\exp(i\omega t)$ 可得预加应变场为 $\varepsilon = \mathbf{I}_{3\times 3}$，此时 $\sum \boldsymbol{F} \cdot \boldsymbol{u} = \frac{9\lambda+6\mu}{2} = \frac{9}{2}K_{\text{eff}}$，这里 $K_{\text{eff}}$ 为等效体模量。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line">close all</span><br><span class="line"></span><br><span class="line"><span class="comment">% 导入 Comsol 模型</span></span><br><span class="line">model = mphload(<span class="string">'EffctiveDensity_silicon_pillar_a200_h100_l355.mph'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 指定关心的频率范围</span></span><br><span class="line">f = [<span class="number">4</span>:<span class="number">0.02</span>:<span class="number">4.5</span>,<span class="number">4.5</span>:<span class="number">0.002</span>:<span class="number">4.55</span>,<span class="number">4.55</span>:<span class="number">0.02</span>:<span class="number">5.5</span>]*<span class="number">1e6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% 有限元求解</span></span><br><span class="line">omega = <span class="number">2</span>*<span class="built_in">pi</span>*f;</span><br><span class="line">model.study(<span class="string">'std1'</span>).feature(<span class="string">'freq'</span>).set(<span class="string">'plist'</span>, f);</span><br><span class="line"><span class="comment">% 根据需要指定位移场</span></span><br><span class="line">model.component(<span class="string">'comp1'</span>).physics(<span class="string">'solid'</span>).feature(<span class="string">'disp1'</span>).set(<span class="string">'U0'</span>, &#123;<span class="string">'0'</span>; <span class="string">'0'</span>; <span class="string">'1e-4'</span>&#125;); </span><br><span class="line"><span class="comment">% 或</span></span><br><span class="line"><span class="comment">% model.component('comp1').physics('solid').feature('disp1').set('U0', &#123;'x'; 'y'; 'z'&#125;); </span></span><br><span class="line"><span class="comment">% 等等</span></span><br><span class="line">model.sol(<span class="string">'sol1'</span>).runAll;</span><br><span class="line"></span><br><span class="line"><span class="comment">% 积分，求解边界支反力</span></span><br><span class="line">model.result.numerical.create(<span class="string">'int11'</span>, <span class="string">'IntSurface'</span>);</span><br><span class="line">model.result.numerical(<span class="string">'int11'</span>).selection.set([<span class="number">1</span> <span class="number">2</span> <span class="number">5</span> <span class="number">18</span>]);</span><br><span class="line">model.result.numerical(<span class="string">'int11'</span>).set(<span class="string">'expr'</span>, &#123;<span class="string">'solid.RFx'</span> <span class="string">'solid.RFy'</span> <span class="string">'solid.RFz'</span>&#125;);</span><br><span class="line">temp = model.result.numerical(<span class="string">'int11'</span>).getReal + <span class="number">1</span><span class="built_in">i</span>*model.result.numerical(<span class="string">'int11'</span>).getImag;</span><br><span class="line">model.result.numerical.remove(<span class="string">'int11'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">% 以下可跟据上述分析，得到各个等效材料常数</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/02/21/Double_Negative/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1103,7 +1107,7 @@ $$
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-20 23:54:18" itemprop="dateModified" datetime="2020-02-20T23:54:18+01:00">2020-02-20</time>
+                <time title="修改时间：2020-02-24 23:34:56" itemprop="dateModified" datetime="2020-02-24T23:34:56+01:00">2020-02-24</time>
               
             
           </span>

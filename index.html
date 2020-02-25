@@ -338,6 +338,321 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/matplotlib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linyun Yang">
+      <meta itemprop="description" content="业精于勤，荒于嬉">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linyun Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/02/25/matplotlib/" class="post-title-link" itemprop="url">matplotlib 作图常用代码</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-25 16:34:41 / 修改时间：16:56:48" itemprop="dateCreated datePublished" datetime="2020-02-25T16:34:41+01:00">2020-02-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常用代码/" itemprop="url" rel="index"><span itemprop="name">常用代码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="读取-Lecroy-示波器导出的时间历程曲线"><a href="#读取-Lecroy-示波器导出的时间历程曲线" class="headerlink" title="读取 Lecroy 示波器导出的时间历程曲线"></a>读取 Lecroy 示波器导出的时间历程曲线</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">fig,ax = plt.subplots(figsize=(<span class="number">8</span>,<span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> np.arange(<span class="number">0</span>,<span class="number">15</span>):</span><br><span class="line">    filename = <span class="string">'F1NO'</span>+str(<span class="number">100000</span>+i)+<span class="string">'.dat'</span></span><br><span class="line">    data = np.loadtxt(filename)</span><br><span class="line">    ax.plot(data[:,<span class="number">0</span>]*<span class="number">1e6</span>,data[:,<span class="number">1</span>]+<span class="number">0.0075</span>*i,color=(<span class="number">227</span>/<span class="number">255</span>,<span class="number">119</span>/<span class="number">255</span>,<span class="number">194</span>/<span class="number">255</span>),linewidth=<span class="number">0.5</span>)</span><br><span class="line">    <span class="comment"># 标注文字</span></span><br><span class="line">    ax.text(<span class="number">-1.2</span>, <span class="number">0.0075</span>*i, <span class="string">"&#123;:.2f&#125;"</span>.format(<span class="number">0.3</span>*i)+<span class="string">'mm'</span>, fontsize=<span class="number">8</span>)</span><br><span class="line">    </span><br><span class="line">ax.plot([<span class="number">0</span>,<span class="number">4</span>],[<span class="number">-0.1607</span>, <span class="number">0.3273</span>],<span class="string">'--'</span>,linewidth=<span class="number">0.5</span>)</span><br><span class="line">ax.set_title(<span class="string">'Measured disp. at different positions'</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'time '</span>+<span class="string">r'$(\mu s)$'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'positions'</span>)</span><br><span class="line">ax.set_xlim([<span class="number">-1.5</span>,<span class="number">10</span>])</span><br><span class="line">ax.set_ylim([<span class="number">-0.01</span>,<span class="number">0.115</span>])</span><br><span class="line">ax.set_aspect(<span class="number">1.0</span>/ax.get_data_ratio()*<span class="number">0.5</span>)</span><br><span class="line">fig.savefig(<span class="string">'time_history.png'</span>,dpi=<span class="number">300</span>,bbox_inches=<span class="string">'tight'</span>)</span><br></pre></td></tr></table></figure>
+
+<center>
+<img src="/images/20200225_time_history.png" width="75%" height="75%">
+图 读取 Lecroy 示波器导出的数据
+</center>
+
+
+<h2 id="读取-Matlab-导出的-mat-数据"><a href="#读取-Matlab-导出的-mat-数据" class="headerlink" title="读取 Matlab 导出的 .mat 数据"></a>读取 Matlab 导出的 .mat 数据</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.io <span class="keyword">as</span> spio <span class="comment"># 读取 .mat 文件</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.cm <span class="keyword">as</span> cm</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">mat = spio.loadmat(<span class="string">'data.mat'</span>, squeeze_me=<span class="literal">True</span>)</span><br><span class="line">fourier = mat[<span class="string">'data_exp'</span>]</span><br><span class="line">extent = mat[<span class="string">'extent'</span>]</span><br><span class="line">k = mat[<span class="string">'k'</span>]</span><br><span class="line">f = mat[<span class="string">'f'</span>]</span><br><span class="line">fig,ax = plt.subplots()</span><br><span class="line">pos = ax.imshow(fourier,origin=<span class="string">'lower'</span>,interpolation=<span class="string">'bicubic'</span>,\</span><br><span class="line">                cmap=cm.hot,extent=extent,vmin=<span class="number">-1.5</span>,vmax=<span class="number">1</span>)</span><br><span class="line">ax.plot(k,f[<span class="number">0</span>],<span class="string">'w'</span>,k,f[<span class="number">1</span>],<span class="string">'w'</span>)</span><br><span class="line">ax.set_xlim([<span class="number">0</span>,<span class="number">8.976</span>])</span><br><span class="line">ax.set_ylim([<span class="number">0</span>,<span class="number">5</span>])</span><br><span class="line">ax.set_title(<span class="string">'Fourier amp. V.S. theoretical dispersion'</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'wave number (1/mm)'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'frequency (MHz)'</span>)</span><br><span class="line"><span class="comment"># 设置整个 figure 的长宽比</span></span><br><span class="line">ax.set_aspect(<span class="number">1.0</span>/ax.get_data_ratio()*<span class="number">0.8</span>)</span><br><span class="line">fig.colorbar(pos,ax=ax)</span><br><span class="line"></span><br><span class="line">fig.savefig(<span class="string">'dispersion.png'</span>,dpi=<span class="number">300</span>,bbox_inches=<span class="string">'tight'</span>)</span><br></pre></td></tr></table></figure>
+
+<center>
+<img src="/images/20200225_dispersion.png" width="50%" height="50%">
+图 读取 Matlab 导出的数据
+</center>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/Comsol-Matlab-Link/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linyun Yang">
+      <meta itemprop="description" content="业精于勤，荒于嬉">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linyun Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/02/25/Comsol-Matlab-Link/" class="post-title-link" itemprop="url">Comsol Matlab Link 常用代码</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-25 10:14:41 / 修改时间：10:16:12" itemprop="dateCreated datePublished" datetime="2020-02-25T10:14:41+01:00">2020-02-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="参数化扫描能带结构数据导出"><a href="#参数化扫描能带结构数据导出" class="headerlink" title="参数化扫描能带结构数据导出"></a>参数化扫描能带结构数据导出</h2><h2 id="积分计算"><a href="#积分计算" class="headerlink" title="积分计算"></a>积分计算</h2>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/Double_Negative/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -400,7 +715,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 23:43:50" itemprop="dateModified" datetime="2020-02-24T23:43:50+01:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 10:06:14" itemprop="dateModified" datetime="2020-02-25T10:06:14+01:00">2020-02-25</time>
               
             
           </span>
@@ -1440,7 +1755,7 @@ $$
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1465,7 +1780,9 @@ $$
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1490,7 +1807,11 @@ $$
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1697,6 +2018,10 @@ $$
 
   
   
+    
+      
+    
+      
     
       
         
